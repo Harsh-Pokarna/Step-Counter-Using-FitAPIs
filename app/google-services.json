@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "206453070089",
+    "project_id": "fitapi-4e532",
+    "storage_bucket": "fitapi-4e532.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:206453070089:android:76b80e886eed8101201bd8",
+        "android_client_info": {
+          "package_name": "com.example.fitapi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "206453070089-rkeq5sqie8elhh641vv72nlqa9eghfpn.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.fitapi",
+            "certificate_hash": "c993685cf0858be5eacbb96a12fc3b75cd4acd32"
+          }
+        },
+        {
+          "client_id": "206453070089-l93rumoleq4kkgi9jt8k4ilcaj1oj22c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT3YIbXLiFSNwlHULCim6uliGqOCxNgjs"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "206453070089-l93rumoleq4kkgi9jt8k4ilcaj1oj22c.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
