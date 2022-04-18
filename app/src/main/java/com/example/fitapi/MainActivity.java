@@ -20,15 +20,21 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.fitness.Fitness;
 import com.google.android.gms.fitness.FitnessOptions;
+import com.google.android.gms.fitness.data.Bucket;
+import com.google.android.gms.fitness.data.DataPoint;
+import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
+import com.google.android.gms.fitness.data.Field;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
@@ -135,7 +141,16 @@ public class MainActivity extends AppCompatActivity {
             Fitness.getHistoryClient(this, account).readData(readRequest)
                     .addOnSuccessListener(dataReadResponse -> {
                         Log.e("TAG", "response data was success");
-                        responseDataTv.setText(dataReadResponse.getBuckets().toString());
+//                        responseDataTv.setText(dataReadResponse.getBuckets().toString());
+                        List<Bucket> buckets = dataReadResponse.getBuckets();
+                        for (int i = 0; i < buckets.size(); i++) {
+                            Bucket bucket = buckets.get(i);
+                            List<DataSet> dataSets = bucket.getDataSets();
+                            for (int j = 0; j < dataSets.size(); j++) {
+                                DataSet dataSet = dataSets.get(j);
+                                dumpDataSet(dataSet);
+                            }
+                        }
 
                     }).addOnFailureListener(e -> {
                 Log.e("TAG", "Fetching Data failed: " + e.getMessage());
@@ -144,5 +159,36 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+    }
+
+    private void dumpDataSet(DataSet dataSet) {
+        Log.e("TAG", "Data returned for Data type: " + dataSet.getDataType().getName());
+        for (DataPoint dp : dataSet.getDataPoints()) {
+            Log.e("TAG","Data point:");
+            Log.e("TAG","Type: " + dp.getDataType().getName());
+            Log.e("TAG","Start: " + getStartTimeString(dp));
+            Log.e("TAG","End: " + getEndTimeString(dp));
+            for (Field field : dp.getDataType().getFields()) {
+                Log.e("TAG","Field: " + field.getName() + "Value: " + dp.getValue(field));
+            }
+        }
+    }
+
+    private String getStartTimeString(DataPoint dataPoint) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Instant.ofEpochSecond(dataPoint.getStartTime(TimeUnit.SECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().toString();
+        }
+        return "";
+    }
+
+    private String getEndTimeString(DataPoint dataPoint) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            return Instant.ofEpochSecond(dataPoint.getEndTime(TimeUnit.SECONDS))
+                    .atZone(ZoneId.systemDefault())
+                    .toLocalDateTime().toString();
+        }
+        return "";
     }
 }
